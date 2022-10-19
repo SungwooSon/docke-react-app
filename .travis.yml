@@ -1,0 +1,19 @@
+#### git main 브랜치에 push가 일어났을때 travis가 해야할 일들을 기술함.
+
+sudo: required
+
+language: generic
+
+services:
+  - docker
+
+before_install:
+  - echo "start Creating an image with dockerfile"
+  - docker build -t ssw0418/docker-react-app -f Dockerfile.dev .
+
+script:
+  - docker run -e CI=true ssw0418/docker-react-app npm run test -- --coverage
+# -e CI=true 는 없으면 travis에서 오류가 나기 때문.  --coverage 는 로그를 상세하게 보기 위함.
+
+after_success:
+  - echo "Test Success"
